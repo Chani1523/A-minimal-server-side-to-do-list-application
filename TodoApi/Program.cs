@@ -145,8 +145,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // הוספת שירותים
 builder.Services.AddCors();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<ToDoDbContext>(options =>
-    options.UseMySql("Server=localhost;Database=ToDoDB;User=root;Password=yourpassword", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.41-mysql")));
+    options.UseMySql(connectionString, Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.41-mysql")));
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
