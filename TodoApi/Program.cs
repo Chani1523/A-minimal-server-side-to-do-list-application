@@ -283,10 +283,9 @@ app.MapDelete("/item/{IdItems}", async (int IdItems, ToDoDbContext db) =>
 
 // הגדרת CORS
 app.UseCors(builder =>
-    builder.WithOrigins("http://localhost:3000") // URL של הלקוח
-           .AllowAnyMethod()
-           .AllowAnyHeader());
-
+    builder.AllowAnyOrigin() // מאפשר לכל מקור
+           .AllowAnyMethod() // מאפשר כל שיטה (GET, POST, PUT וכו')
+           .AllowAnyHeader()); // מאפשר כל כותרת
 
 
 // הפעלת Swagger
