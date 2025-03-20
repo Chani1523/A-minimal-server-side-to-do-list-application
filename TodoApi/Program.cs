@@ -173,7 +173,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 var app = builder.Build();
+app.UseCors(builder =>
+    builder.AllowAnyOrigin() // מאפשר לכל מקור
+           .AllowAnyMethod() // מאפשר כל שיטה (GET, POST, PUT וכו')
+           .AllowAnyHeader()); // מאפשר כל כותרת
 
+app.UseAuthentication();
+app.UseAuthorization();
 // הגדרת מסלולים
 
 // דף ברוך הבא (רק לבדוק אם השרת עובד)
@@ -282,21 +288,15 @@ app.MapDelete("/item/{IdItems}", async (int IdItems, ToDoDbContext db) =>
 }).RequireAuthorization();  // דורש אימות JWT
 
 // הגדרת CORS
-app.UseCors(builder =>
-    builder.AllowAnyOrigin() // מאפשר לכל מקור
-           .AllowAnyMethod() // מאפשר כל שיטה (GET, POST, PUT וכו')
-           .AllowAnyHeader()); // מאפשר כל כותרת
-
 
 // הפעלת Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// הפעלת Authentication ו-Authorization
-app.UseAuthentication();  // חייב להיות לפני UseAuthorization
-app.UseAuthorization();
 
 // מיפוי Controllers (אם יש לך Controllers נוספים)
 app.MapControllers();
 
-app.Run();
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+app.Run($"http://0.0.0.0:{port}");
+
