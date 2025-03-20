@@ -237,10 +237,14 @@ app.MapPost("/register", (User newUser, ToDoDbContext db) =>
         return Results.Ok();
     }
     catch (Exception ex)
-    {
-        Console.WriteLine($"Error during registration: {ex.Message}");
-        return Results.Problem(detail: ex.Message, statusCode: 500);
-    }
+{
+    Console.WriteLine($"❌ Error during registration: {ex.Message}");
+    if (ex.InnerException != null)
+        Console.WriteLine($"💥 Inner exception: {ex.InnerException.Message}");
+    
+    return Results.Problem(detail: ex.Message, statusCode: 500);
+}
+
 });
 
 
